@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain.tools import tool
 from langchain.agents import create_agent
-
+from langgraph.checkpoint.memory import InMemorySaver
 load_dotenv()
 
 PRODUCTS = {
@@ -26,6 +26,7 @@ agent = create_agent(
     llm,
     tools=[get_product],
     system_prompt="You are a helpful product assistant for an online tech store.",
+    checkpointer=InMemorySaver()
 )
 
 def ask(question:str):
