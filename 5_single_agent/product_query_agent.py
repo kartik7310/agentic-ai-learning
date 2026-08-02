@@ -16,11 +16,16 @@ PRODUCTS = {
 def get_product(name:str)->str:
         """Look up a product by name and return its price, rating, stock, and description."""
         P = PRODUCTS.get(name.lower())
-        if P:
+        if not P:
             return f"Product not found. Available: {', '.join(PRODUCTS)}"
-        return str(P)
+        return (
+        f"Product: {name}\n"
+        f"Price: ${P['price']}\n"
+        f"Rating: {P['rating']}⭐\n"
+        f"Description: {P['description']}"
+    )
 
-llm = ChatGroq(model="llama-3.3-70b-versatile",temperature=0)
+llm = ChatGroq(model="openai/gpt-oss-20b",temperature=0)
 
 agent = create_agent(
     llm,
@@ -34,4 +39,8 @@ def ask(question:str):
         result = agent.invoke({"messages": [{"role": "user", "content": question}]},config)
         print(result["messages"][-1].content)
 
-ask("what is the price of wireless headphones.")
+
+user_question = input("Ask a question about a product: ")
+while user_question.lower() != "exit":
+    ask(user_question)
+    user_question = input("Ask another question about a product (or type 'exit' to quit): ")
