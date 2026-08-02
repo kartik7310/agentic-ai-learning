@@ -30,7 +30,8 @@ agent = create_agent(
 )
 
 def ask(question:str):
-        result = agent.invoke({"messages": [{"role": "user", "content": question}]})
+        config = {"configurable": {"thread_id": "user-alice-session-1"}}
+        result = agent.invoke({"messages": [{"role": "user", "content": question}]},config)
         print(result["messages"][-1].content)
 
 ask("what is the price of wireless headphones.")
